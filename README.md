@@ -26,12 +26,31 @@ Handling optional values is a common challenge in software development. KOptiona
 Add the KOptional project to your solution or reference it as a library.
 
 ### Usage
+```
 using KOptional;
-// Create an optional with a value var opt = new Optional<int>(42);
-// Check if a value is present if (opt.HasValue) { Console.WriteLine($"Value: {opt.Value}"); }
-// Use implicit conversion Optional<string> name = "Alice";
-// Safe value extraction if (name.TryGetValue(out var value)) { Console.WriteLine($"Name: {value}"); }
-// Provide a default value var result = name.Coalesce("Unknown");
+// Create an optional with a value
+var opt = new Optional<int>(42);
+
+// Check if a value is present 
+if (opt.HasValue) 
+{ 
+    Console.WriteLine($"Value: {opt.Value}"); 
+}
+
+// Use implicit conversion 
+Optional<string> name = "Alice";
+
+// Safe value extraction 
+if (name.TryGetValue(out var value)) 
+{ 
+    Console.WriteLine($"Name: {value}"); 
+}
+
+// Provide a default value with the Coalesce method
+var result = name.Coalesce("Unknown");
+
+```
+
 
 
 ## API Overview
