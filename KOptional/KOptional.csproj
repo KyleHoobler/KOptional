@@ -3,10 +3,16 @@
 <PropertyGroup>
   <TargetFramework>net8.0</TargetFramework>
   <PackageId>KOptional</PackageId>
-  <Version>1.0.1</Version>
+  <Version>1.0.2</Version>
   <Authors>YourName</Authors>
   <Description>A modern, lightweight C# library for optional values.</Description>
   <RepositoryUrl>https://github.com/KyleHoobler/KOptional</RepositoryUrl>
+  <PackageReadmeFile>README.md</PackageReadmeFile>
+  <PackageLicenseExpression>MIT</PackageLicenseExpression>
 </PropertyGroup>
+
+<ItemGroup>
+	<None Include="README.md" Pack="true" PackagePath="" />
+</ItemGroup>
 
 </Project>
