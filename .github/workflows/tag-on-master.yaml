@@ -34,3 +34,38 @@ jobs:
       - name: Publish to NuGet
         run: dotnet nuget push bin/Release/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
         if: github.ref_type == 'tag'
+  build-test-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all tags
+
+      - name: Get version from csproj
+        id: get_version
+        run: |
+          VERSION=$(grep -m1 '<Version>' KOptional/KOptional.csproj | sed -E 's/.*<Version>(.*)<\/Version>.*/\1/')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Fail if tag exists
+        run: |
+          if git rev-parse "v${{ steps.get_version.outputs.version }}" >/dev/null 2>&1; then
+            echo "Error: Tag v${{ steps.get_version.outputs.version }} already exists."
+            exit 1
+          fi
+
+      - name: Restore dependencies
+        run: dotnet restore KOptional/KOptional.csproj
+
+      - name: Build
+        run: dotnet build KOptional/KOptional.csproj --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test KOptional/KOptional.csproj --configuration Release --no-build
+
+      - name: Pack
+        run: dotnet pack KOptional/KOptional.csproj --configuration Release --no-build --output ./nupkg
+
+      - name: Publish to NuGet
+        run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
